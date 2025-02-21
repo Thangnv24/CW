@@ -1,0 +1,137 @@
+# basic_types.py:
+
+Đây là một hệ thống phân loại các kiểu dữ liệu trong Python dành cho một trình biên dịch BASIC-to-LLVM assembler. Nó sử dụng thư viện llvmlite để biểu diễn các kiểu LLVM IR và triển khai các chức năng chuyển đổi kiểu dữ liệu, giá trị mặc định, cũng như các phép toán số học khi cần thiết. Mã này bao gồm các kiểu định nghĩa đáng chú ý như sau:
+
+VoidT, NumericT, IntegralT, FloatingPointT, BoolT: Các kiểu cơ bản như số nguyên, số dấu phẩy động, với khả năng thực hiện phép toán, phép so sánh và chuyển đổi kiểu.
+StringT: Đại diện cho chuỗi ký tự, có cấu hình bất biến (is_const) và độ dài, ảnh hưởng đến kiểu dữ liệu LLVM của nó.
+ArrayT: Kiểu mảng nhiều chiều động, hỗ trợ giá trị mặc định lồng nhau và định nghĩa kiểu dữ liệu LLVM tương ứng.
+ProcedureT: Định nghĩa các hàm (subroutines) với kiểu trả về và danh sách tham số, kèm kiểm tra tương thích cho các tham số biến số (variadic).
+VariadicArgumentT: Đại diện cho các tham số biến số trong các thủ tục.
+WhileType: Enum để phân loại các loại vòng lặp hỗ trợ trong ngôn ngữ BASIC này, như vòng lặp vô tận, vòng lặp có điều kiện trước hoặc sau.
+Hệ thống phân loại kiểu này cho phép trình biên dịch xử lý hiệu quả các cấu trúc BASIC, thực hiện các phép toán và chuyển đổi kiểu dữ liệu, đảm bảo việc tạo mã trong LLVM IR diễn ra suôn sẻ trên các kiến trúc khác nhau.
+
+# ast.py:
+
+Tệp ast.py của bạn có thể là một file Python chứa các lớp và chức năng để biểu diễn và thao tác với cây cú pháp trừu tượng (AST - Abstract Syntax Tree). Trong ngữ cảnh của một trình biên dịch, AST là một cấu trúc dữ liệu dùng để thể hiện cú pháp của mã nguồn sau khi đã được phân tích. Để hiểu rõ hơn, dưới đây là cách các thành phần chính trong tệp ast.py thường được cấu trúc:
+
+1. Các lớp đại diện cho thành phần của mã nguồn
+Các lớp trong ast.py có thể đại diện cho các thực thể của ngôn ngữ mà bạn muốn biên dịch, chẳng hạn như:
+
+Biểu thức (Expressions): biểu diễn các phép toán, số, hoặc biến trong mã.
+Câu lệnh (Statements): biểu diễn các hành động như gán giá trị, vòng lặp, hoặc điều kiện if-else.
+Hàm hoặc thủ tục (Functions/Procedures): biểu diễn các định nghĩa hàm, với tên hàm, danh sách tham số, và nội dung của hàm.
+2. Thuộc tính và phương thức
+Mỗi lớp đại diện cho một phần tử AST có thể có các thuộc tính lưu trữ thông tin cần thiết, ví dụ:
+
+Tên biến hoặc hàm.
+Loại giá trị (như kiểu int, float, string trong chương trình).
+Danh sách các tham số hoặc đối số của một hàm.
+Phương thức xử lý: Các phương thức có thể cho phép duyệt, chuyển đổi, hoặc phân tích AST để thực hiện các chức năng như tối ưu mã, xác minh cú pháp, hoặc sinh mã mục tiêu (assembly hoặc bytecode).
+
+3. Ví dụ về các lớp có thể có trong ast.py
+Lớp BinaryOp (biểu diễn phép toán nhị phân): lớp này có thể chứa thông tin về phép toán (như +, -, *, /) và các toán hạng (ví dụ: lhs, rhs là các đối số bên trái và phải của phép toán).
+Lớp Assignment (biểu diễn phép gán): lớp này có thể chứa một biến và giá trị được gán vào biến đó.
+Lớp FunctionDef (định nghĩa hàm): lớp này có thể chứa tên hàm, danh sách tham số, và phần thân hàm (là một danh sách các câu lệnh).
+4. Duyệt và xử lý AST
+Trong một trình biên dịch hoặc thông dịch viên, các lớp này thường có một phương thức để duyệt (traverse) và xử lý cây cú pháp:
+
+Duyệt cây: để phân tích từng thành phần của mã theo đúng thứ tự thực thi.
+Tối ưu hóa: để thực hiện các bước như lược bỏ các phần mã không cần thiết hoặc hợp nhất các phép tính đơn giản.
+Sinh mã: AST sẽ được chuyển thành mã máy hoặc mã bytecode của máy ảo, chẳng hạn như mã cho LLVM hoặc JVM.
+
+# errors.py:
+Tệp mã bạn đã đăng tải và chia sẻ bao gồm các lớp ngoại lệ được tạo để xử lý các lỗi ngữ nghĩa (semantic errors) trong ngôn ngữ lập trình tùy chỉnh hoặc trong một ngữ cảnh biên dịch. Mỗi lớp là một loại lỗi ngữ nghĩa cụ thể, với mục đích cung cấp thông báo chi tiết về lỗi xảy ra.
+
+Dưới đây là một giải thích chi tiết về từng lớp và các trường hợp lỗi mà chúng xử lý:
+
+1. Cấu trúc chính của các lớp ngoại lệ
+Mỗi lớp ngoại lệ kế thừa từ lớp SemanticError, là một lớp con của pe.Error.
+Mỗi ngoại lệ được định nghĩa với một số thuộc tính nhất định (chẳng hạn như pos - vị trí lỗi, type_ - loại biến hoặc biểu thức).
+Phương thức message được ghi đè để trả về thông báo lỗi có ý nghĩa, thường bao gồm các thông tin như tên biến, kiểu dữ liệu, hoặc vị trí xảy ra lỗi.
+2. Các loại lỗi và ý nghĩa
+BinBadType: Xảy ra khi có sự không tương thích về kiểu dữ liệu trong phép toán nhị phân (ví dụ: cộng hai kiểu không tương thích).
+UndefinedBinOperType: Lỗi khi phép toán nhị phân không được định nghĩa cho các kiểu toán hạng đã cho (ví dụ: phép cộng không hợp lệ giữa kiểu số nguyên và chuỗi).
+UnaryBadType: Lỗi khi thực hiện phép toán đơn với kiểu dữ liệu không hợp lệ.
+ArrayNotIntIndexing: Lỗi khi sử dụng kiểu dữ liệu không phải là số nguyên để đánh chỉ mục mảng.
+ArrayIndexingDimensionMismatchError: Lỗi xảy ra khi kích thước của mảng không tương thích với danh sách chỉ số.
+IfNotIntCondition và WhileNotIntCondition: Điều kiện if hoặc while không có kiểu số nguyên, gây lỗi logic.
+ArrayNotIntInit và NotIntFor: Xảy ra khi một mảng hoặc một vòng lặp yêu cầu kiểu số nguyên nhưng gặp phải kiểu dữ liệu không hợp lệ.
+UnexpectedNextFor: Được dùng khi một vòng lặp for có biến đếm không hợp lệ.
+RedefinitionError: Lỗi khi một biến hoặc hàm được khai báo lại trong phạm vi hiện tại.
+UndefinedSymbol và UndefinedFunction: Được dùng khi một biến hoặc hàm chưa được định nghĩa trước khi sử dụng.
+InappropriateExit: Được dùng khi gặp phải một lệnh exit không hợp lệ trong ngữ cảnh hiện tại.
+InappropriateInitializerList và InitializerListDimensionMismatch: Lỗi khi danh sách khởi tạo không hợp lệ về loại hoặc kích thước.
+ConversionError và InitializationTypeError: Xảy ra khi có sự không tương thích giữa các loại trong quá trình khởi tạo hoặc chuyển đổi.
+InitializationLengthMismatchError và InitializationUndefinedLengthError: Xảy ra khi kích thước danh sách khởi tạo không khớp hoặc chưa được xác định.
+InitializationNonConstSize và InitializationNegativeSize: Lỗi khi kích thước mảng không phải là hằng số hoặc là số âm.
+MultipleVariadicArgumentsInProtoError và VariadicArgumentsInProtoNotLastError: Xảy ra khi có nhiều hơn một tham số biến đổi (variadic argument) hoặc khi tham số này không nằm ở vị trí cuối cùng trong danh sách tham số.
+3. Cách sử dụng các lớp lỗi
+Các lớp lỗi này có thể được sử dụng trong trình biên dịch hoặc trình thông dịch của bạn để phát hiện và báo cáo các lỗi ngữ nghĩa cho người lập trình. Khi một lỗi được phát hiện, bạn có thể tạo một thể hiện của lớp lỗi tương ứng, truyền vào các thông tin chi tiết về lỗi, và ném ra ngoại lệ để ngăn chặn quá trình biên dịch.
+
+Ví dụ sử dụng:
+# Ví dụ về việc tạo và xử lý một lỗi khi loại toán tử nhị phân không hợp lệ.
+try:
+    raise BinBadType(pos=42, left="int", op="+", right="str")
+except BinBadType as e:
+    print(e.message)  # Kết quả: Несовместимые типы: int + str
+Bằng cách xây dựng các lớp ngoại lệ cụ thể, bạn có thể cung cấp cho người dùng thông tin chi tiết về lỗi, giúp họ dễ dàng hiểu và khắc phục các vấn đề ngữ nghĩa trong mã nguồn của mình.
+
+# symbol_table.py:
+Mã này định nghĩa các lớp và cấu trúc dữ liệu để quản lý bảng ký hiệu (symbol table) trong ngôn ngữ lập trình tùy chỉnh. Đây là thành phần quan trọng trong biên dịch và phân tích mã nguồn, giúp tổ chức và theo dõi các biến, hàm, và khối lệnh. Dưới đây là giải thích chi tiết về từng thành phần chính trong mã này.
+
+Các thành phần trong mã
+SymbolTableBlockType Enum:
+
+Đây là liệt kê các loại khối (block type) có thể tồn tại trong một bảng ký hiệu, như khối toàn cục (GlobalBlock), khối hàm (FunctionBlock), hoặc vòng lặp (ForLoopBlock và WhileLoopBlock).
+Điều này giúp phân loại các khối khác nhau trong bảng ký hiệu, cho phép quản lý phạm vi (scope) của các biến và hàm một cách hiệu quả.
+Symbol Class:
+
+Symbol đại diện cho một ký hiệu (symbol) đơn lẻ, có thể là một biến hoặc một hàm.
+Các thuộc tính:
+name: tên biến hoặc hàm.
+type: kiểu dữ liệu của ký hiệu.
+external: đánh dấu liệu ký hiệu có nằm ngoài phạm vi hiện tại hay không.
+llvm_obj: đối tượng liên kết LLVM, dùng cho quá trình biên dịch sang mã máy.
+Phương thức assoc liên kết ký hiệu với một đối tượng LLVM, giúp tích hợp bảng ký hiệu với mã biên dịch LLVM.
+SymbolTableLLVMEntry Class:
+
+SymbolTableLLVMEntry lưu trữ thông tin LLVM, bao gồm module, builder, và obj (đối tượng liên kết).
+Phương thức builder và assoc cho phép cập nhật builder hoặc đối tượng liên kết, để thích nghi với các cấu trúc mã LLVM khác nhau.
+SymbolTable Class:
+
+SymbolTable quản lý bảng ký hiệu, lưu trữ các ký hiệu trong một khối và xử lý các bảng ký hiệu con cho các khối phạm vi lồng nhau.
+Các thuộc tính:
+parent: bảng ký hiệu cha, dùng để thiết lập phạm vi lồng nhau.
+table: danh sách các Symbol trong bảng hiện tại.
+children: danh sách các bảng ký hiệu con.
+block_type, block_obj, llvm: loại khối, đối tượng khối và đối tượng LLVM tương ứng.
+Các phương thức trong SymbolTable
+add:
+
+Thêm một ký hiệu mới vào bảng hiện tại. Nếu ký hiệu đã tồn tại ở cấp hiện tại, phương thức này sẽ ném ra lỗi RedefinitionError.
+lookup_local_result được dùng để tìm kiếm ký hiệu trùng lặp trong cùng phạm vi.
+lookup:
+
+Tìm kiếm ký hiệu theo tên hoặc các thuộc tính khác (by_name, by_type, by_origin).
+Hỗ trợ tìm kiếm trong phạm vi cục bộ hoặc toàn bộ phạm vi cha-con.
+Nếu accumulate=True, phương thức sẽ trả về danh sách các ký hiệu phù hợp; nếu không, chỉ trả về ký hiệu đầu tiên.
+lookup_block:
+
+Tìm kiếm khối có loại (block_type) nhất định trong phạm vi cha-con.
+Có thể trả về một khối cụ thể hoặc một danh sách các khối nếu accumulate=True.
+new_local:
+
+Tạo bảng ký hiệu con mới, với block_type và block_obj chỉ định.
+Được sử dụng để xây dựng bảng ký hiệu cho các khối lồng nhau (ví dụ: tạo phạm vi mới cho hàm hoặc vòng lặp).
+builder và assoc:
+
+Cập nhật builder hoặc đối tượng liên kết của llvm_entry, tích hợp bảng ký hiệu với mã LLVM.
+print:
+
+In cấu trúc bảng ký hiệu, bao gồm tên và loại của mỗi ký hiệu.
+Đệ quy qua các bảng ký hiệu con và hiển thị thụt đầu dòng để minh họa phạm vi lồng nhau.
+Cách sử dụng và ứng dụng
+SymbolTable và Symbol cung cấp cấu trúc để xây dựng và quản lý bảng ký hiệu, giúp theo dõi và kiểm soát các biến, hàm, và khối lệnh.
+Các phương thức như add, lookup, và lookup_block cung cấp khả năng tra cứu và thêm ký hiệu vào bảng, giúp phát hiện lỗi như trùng lặp tên hoặc phạm vi biến chưa được định nghĩa.
+SymbolTableLLVMEntry và llvm_obj hỗ trợ quá trình biên dịch LLVM, liên kết các ký hiệu với mã máy, và quản lý các phép toán tại cấp độ thấp.
+Mã này hữu ích trong xây dựng một trình biên dịch hoặc thông dịch, đặc biệt là khi làm việc với ngôn ngữ LLVM hoặc khi cần quản lý phạm vi biến, phát hiện lỗi và kiểm soát các khối mã phức tạp.

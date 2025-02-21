@@ -1,0 +1,104 @@
+Program ::= Global_declaration
+
+Global_declaration ::= Declaration Global_declarations | eps
+
+Declaration ::= Subroutine_declaration | Subroutine_definition | Function_declaration | Function_definition | Variable_declaration
+
+Subroutine_prototype ::= SUB IDENTIFIER "(" Parameters_list ")"
+
+Function_prototype ::= FUNCTION Varname "(" Parameters_list ")"
+
+Subroutine_definition ::= Subroutine_prototype Statements END_SUB
+
+Function_definition ::= Function_prototype Statements END_FUNCTION
+
+Subroutine_declaration ::= DECLARE Subroutine_prototype
+
+Function_declaration ::= DECLARE Function_prototype
+
+Variable_declaration ::= DIM Varname_or_array_argument Variable_initialization
+
+Variable_initialization ::= "=" Expression | "=" InitialValueList | eps
+
+InitialValueList ::= "{" Initializer_list_values "}"
+
+Initializer_list_values ::= Initializer_list_value "," Initializer_list_values | Initializer_list_value
+
+Initializer_list_value ::= Expression | Initializer_list
+
+Parameters_list ::= Varname_or_array_parameter "," Parameters_list | Varname_or_array_parameter | eps
+
+Non_empty_parameters_list ::= Varname_or_array_parameter Non_empty_parameters_list | Varname_or_array_parameter
+
+Varname_or_array_parameter ::= Varname | Varname "(" Comma_list ")"
+
+Comma_list ::= "," Comma_list | eps
+
+Argument_list ::= Expression "," Non_empty_arguments_list | Expression | eps
+
+Non_empty_arguments_list ::= Expression "," Non_empty_arguments_list | Expression
+
+Varname_or_array_argument ::= Varname | Varname "(" Non_empty_arguments_list ")" | Varname "(" Comma_list ")"
+
+Func_call_or_array_index ::= Varname "(" Arguments_list ")" | IDENTIFIER "(" Arguments_list ")"
+
+Func_call ::= PRINT Arguments_list
+
+Varname ::= IDENTIFIER Type
+
+Type ::= "%" | "&" | "!" | "#" | "$"
+
+Statements ::= Statement Statements | Exit_statement | Statement | eps
+
+Non_empty_statements ::= Statement Non_empty_statements | Exit_statement | Statement
+
+Statement ::= Variable_declaration | Assignment_statement | Func_call_or_array_index | Func_call | Loop | If_Clause
+
+Assignment_statement ::= Varname "=" Expression | Func_call_or_array_index "=" Expression
+
+If_Clause ::= IF Expression THEN Statements Else_Clause END_IF
+
+Exit_statement ::= EXIT_FOR | EXIT_FOR Varname | EXIT_DO | EXIT_LOOP | EXIT_SUB | EXIT_FUNCTION
+
+Else_Clause ::= ELSE Statements | eps
+
+Loop ::= For_loop | While_loop
+
+For_loop ::= FOR Varname "=" Expression TO Expression Statements NEXT Varname
+
+While_loop ::= DO Pre_or_post_loop
+
+Pre_or_post_loop ::= WHILE Pre_loop | UNTIL Pre_loop | Post_loop
+
+Pre_loop ::= Expression Statements LOOP
+
+Post_loop ::= Statements LOOP Post_loop_expression
+
+Post_loop_expression ::= WHILE Expression | UNTIL Expression | eps
+
+Expression ::= Arithmetic_expression | Arithmetic_expression Comparison_operator Arithmetic_expression
+
+Comparison_operator ::= ">" | "<" | ">=" | "<=" | "=" | "<>"
+
+Arithmetic_expression ::= Term | Add_operator Term | Arithmetic_expression Add_operator Term
+
+Add_operator ::= "+" | "-"
+
+Term ::= Ter | Term "*" Ter | Term "/" Ter
+
+Ter ::= Varname | Constant | "(" Expression ")" | Func_call_or_array_index
+
+Constant ::= INTEGERANT | REAL_NUMBERANT | STRINGANT
+
+INTEGER ::= [0-9]+
+REAL_NUMBER ::= [0-9]+"."([0-9]*)?(e[-+]?[0-9]+)?
+STRING ::= "\""[^\"]*"\""
+IDENTIFIER ::= [A-Za-z][A-Za-z0-9_]*
+
+SUB FUNCTION END DECLARE DIM PRINT
+"{" "}" "," "(" ")"
+"%" "&" "!" "#" "$"
+IF THEN ELSE
+FOR TO NEXT EXIT
+DO LOOP WHILE UNTIL
+">" "<" ">=" "<=" "=" "<>" "+" "-"

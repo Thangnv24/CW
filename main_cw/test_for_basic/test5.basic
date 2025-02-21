@@ -1,0 +1,25 @@
+Function thang$(thang_a$, thang_b$())
+    i% = 0
+    If Len%(thang_b$) = 1 Then
+        i% = 1
+    Else
+        i% = 2
+    End if
+End Function
+
+Function thangg$(thang_a$, thang_b$())
+    For i% = 2 To Len%(thang_b$)
+        i% = i%
+    Next i%
+End Function
+
+Function thanggg$(thang_a$, thang_b$())
+    i% = 0
+    Do While i% < 10
+        i% = i% + 1
+    Loop
+End Function
+
+Declare Function than$(thang_a$, thangb$(), thang_c%)
+
+

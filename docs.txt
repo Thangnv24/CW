@@ -1,0 +1,65 @@
+Để thực hiện bài coursework về việc xây dựng một trình biên dịch từ một phiên bản Basic sang Assembly cho một trong các máy x86-32, x86-64, ARM hoặc nền tảng ảo (LLVM, CIL1), bạn sẽ cần thực hiện theo các bước dưới đây:
+
+1. Phân tích ngữ pháp và cú pháp của ngôn ngữ Basic
+Xác định các thành phần cú pháp: Phân tích cú pháp của các thành phần chính như các phép tính (cộng, nhân), các cấu trúc điều khiển (các vòng lặp For, Do, điều kiện If, v.v.), các định danh của biến, hàm và thủ tục.
+Loại biến và hàm: Lưu ý các quy tắc của loại dữ liệu: % cho số nguyên, & cho số nguyên dài, ! cho số thực đơn, # cho số thực kép và $ cho chuỗi.
+Chú ý cú pháp đặc biệt: Ví dụ, dòng bắt đầu bằng ' là dòng chú thích, và cú pháp vòng lặp Do While, Do Until, Loop có các cách sử dụng khác nhau, như với Loop While, Loop Until,...
+2. Xây dựng cây phân tích cú pháp (Syntax Tree)
+Lập trình viên tự xây dựng cây cú pháp: Dùng ngôn ngữ lập trình bạn đã chọn để xây dựng cây phân tích cú pháp từ mã nguồn Basic. Mỗi thành phần như For, If, Dim, Sub, v.v., sẽ được mô hình hóa thành một node trong cây.
+Tạo bộ phân tích từ vựng và cú pháp: Bộ phân tích từ vựng sẽ tách mã thành các token (như từ khóa, biến, toán tử,...). Bộ phân tích cú pháp sẽ sử dụng các token này để xây dựng cây cú pháp theo quy tắc ngữ pháp.
+3. Xây dựng bộ dịch sang Assembly
+Chọn kiến trúc đích: Lựa chọn nền tảng máy thực (x86, ARM) hoặc ảo (LLVM, CIL1) sẽ ảnh hưởng đến các lệnh và cấu trúc mã Assembly.
+Biến đổi từ cây cú pháp thành mã Assembly: Với mỗi node trong cây, bạn cần có hàm hoặc quy tắc chuyển đổi tương ứng để tạo mã Assembly. Ví dụ, với phép tính trong Basic như SumArray# = SumArray# + Values#(i%), bạn cần xác định các lệnh tải (LOAD), cộng (ADD), và lưu (STORE) trong Assembly.
+Xử lý các vòng lặp và điều kiện: Với các vòng For, Do/Loop, bạn sẽ cần biến đổi chúng thành các nhãn (label) và lệnh nhảy (jump) phù hợp với Assembly. Lưu ý xử lý các điều kiện dừng Exit For, Exit Do,...
+4. Tối ưu hóa mã Assembly
+Tối ưu hóa lệnh: Xóa bỏ các lệnh thừa, tối ưu hóa các phép tính để giảm số lượng lệnh. Ví dụ, thay vì tải cùng một biến nhiều lần, có thể sử dụng thanh ghi (register) nếu máy đích hỗ trợ.
+Tối ưu hóa vòng lặp và điều kiện: Áp dụng tối ưu hóa cho các vòng lặp và điều kiện để chúng hiệu quả hơn trên bộ xử lý đích.
+5. Kiểm thử và đánh giá
+So sánh đầu ra: So sánh mã Assembly đã tạo với mã mong muốn để xác minh tính chính xác.
+Đo lường hiệu suất: Đo lường tốc độ và hiệu suất của mã Assembly để đảm bảo tối ưu hóa hiệu quả.
+Công cụ hỗ trợ
+Trình biên dịch LLVM hoặc NASM: Để dịch và kiểm tra mã Assembly.
+Trình gỡ lỗi: Dùng các công cụ như gdb (với x86) để theo dõi các lệnh Assembly và xác định lỗi.
+Quy trình này giúp bạn hoàn thiện từ phân tích cú pháp, chuyển đổi mã nguồn Basic sang Assembly, và tối ưu hóa mã cuối cùng.
+
+Giới thiệu
+- Tại sao phải xây dựng trình biên dịch, vai trò của nó
+- Các giai đoạn để phát triển và triển khai trình biên dịch
+1. Phần lý thuyết
+1.1 Giới thiệu ngôn ngữ Basic các đặc điểm của nó
+1.2 CƠ bản các bước xây dựng trình biên dịch
+Là triển khai tuần tự các bước sau:....
+-Phân tích từ vựng
+Các giai đoạn của phân tích từ vựng:...
+-Phân tích cú pháp (xây dựng cây phân tích cú pháp)
+Các giai đoạn của phân tích cú pháp:...
+-Phân tích ngữ nghĩa (Xây dựng cây cú pháp trìu tượng)
++Phân tích các kiểu dữ liệu
++Kiểm tra nội dung khai báo và phạm vi
++Phân giải tên
++Phân tích cấu trúc điều khiển
++Lời gọi hàm, thủ tục
++Kiểm tra các hạn chế ngữ nghĩa của ngôn ngữ
++ Tạo đại điện nội bộ
+-Xây dựng bộ dịch sang mã Assembly
++Lựa chọn cấu trúc mục tiêu
++Chuyển biểu diễn bên trong sang mã máy
++Tạo dữ liệu bổ sung
++Hỗ trợ mội trường thời gian chạy
+-Xây dựng bố cục
++Lựa chọn và tải các mô đun
++Tạo bảng ký hiệu
++Tạo tệp hoặc thư viên thực thi
+2. Triển khai và phát triển
+
+
+Преобразовать LLVM IR в ассемблерный код:
+llc --opaque-pointers test_for_basic/test1.ll -o test_for_basic/*.s
+
+Компилировать ассемблерный код в объектный машинный код:
+clang -c test_for_basic/*.s -o test_for_basic/*.o
+
+Свяжить объектный машинный код (test1.o) со статической библиотекой (libruntimelib.a):
+llvm_ir/build/libruntimelib.a -o final_program
+
+./final_program

@@ -1,0 +1,4 @@
+Dim some_global_var%
+Dim some_global_array%(100)
+' Можно определять многомерные массивы:
+Dim matrix!(100, 100)

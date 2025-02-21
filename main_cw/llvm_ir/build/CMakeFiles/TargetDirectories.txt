@@ -1,0 +1,4 @@
+/mnt/d/downloads/bmstu/7st_sem/cw/main_cw/llvm_ir/build/CMakeFiles/runtimelib.dir
+/mnt/d/downloads/bmstu/7st_sem/cw/main_cw/llvm_ir/build/CMakeFiles/std-library-llvm.dir
+/mnt/d/downloads/bmstu/7st_sem/cw/main_cw/llvm_ir/build/CMakeFiles/edit_cache.dir
+/mnt/d/downloads/bmstu/7st_sem/cw/main_cw/llvm_ir/build/CMakeFiles/rebuild_cache.dir
